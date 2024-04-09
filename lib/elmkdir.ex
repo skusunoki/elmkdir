@@ -2,17 +2,9 @@ defmodule Elmkdir do
   @moduledoc """
   Documentation for `Elmkdir`.
   """
-
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Elmkdir.hello()
-      :world
-
-  """
-  def hello do
-    :world
+  @spec main([String.t()]) :: any()
+  def main(argv) do
+    argv
+    |> Elmkdir.CLI.run()
   end
 end

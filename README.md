@@ -1,21 +1,35 @@
 # Elmkdir
 
-**TODO: Add description**
+create windows' folder with unique prefix name
+
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `elmkdir` to your list of dependencies in `mix.exs`:
+### Folder Configuration
+add file `/config/config.secrets.exs`
 
-```elixir
-def deps do
-  [
-    {:elmkdir, "~> 0.1.0"}
-  ]
-end
+```/config/config.secrets.exs
+import Config
+config :tzdata, data_dir: "YOUR_PROJECT_PATH/_build/dev/lib/tzdata/priv/_build/dev/lib/elmkdir"
+config :elmkdir, parent_dir: "YOUR_PARENT_FOLDER", folder_link_file_dir: "YOUR_LINK_FILE_FOLDER"
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/elmkdir>.
+### Install
+```bash
+mix escript.install
+```
+
+### Path Settings
+add `HOME\.mix\escripts` to PATH.
+
+### Execute program
+
+#### create folder and open it by explorer
+```bash
+elmkdir -e folder_name
+```
+#### create folder and open it by VSCode
+```bash
+elmkdir -e folder_name
+```
 
