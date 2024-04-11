@@ -30,6 +30,6 @@ elmkdir -e folder_name
 ```
 #### create folder and open it by VSCode
 ```bash
-elmkdir -e folder_name
+elmkdir -c folder_name
 ```
 

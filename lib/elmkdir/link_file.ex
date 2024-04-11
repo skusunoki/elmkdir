@@ -1,7 +1,9 @@
 defmodule Elmkdir.LinkFile do
-
   def create_link_file(full_path, now, folder) do
-    new_file = Elmkdir.Config.folder_link_file_dir() <> "/" <> Elmkdir.DateTime.to_yyyymmddhhMMss(now) <> ".md"
+    new_file =
+      Elmkdir.Config.folder_link_file_dir() <>
+        "/" <> Elmkdir.DateTime.to_yyyymmddhhMMss(now) <> ".md"
+
     content = """
     ---
     ID: #{Elmkdir.DateTime.to_yyyymmddhhMMss(now)}
@@ -16,6 +18,7 @@ defmodule Elmkdir.LinkFile do
     [[#{Elmkdir.DateTime.to_year(now)}-#{Elmkdir.DateTime.to_month(now)}-#{Elmkdir.DateTime.to_day(now)}]] フォルダの作成
 
     """
+
     File.write!(new_file, content)
   end
 end

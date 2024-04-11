@@ -103,6 +103,7 @@ defmodule Elmkdir.DateTime do
     |> Integer.to_string()
     |> String.pad_leading(2, "0")
   end
+
   @doc """
   Convert a DateTime struct to a period string.
 
@@ -113,10 +114,65 @@ defmodule Elmkdir.DateTime do
   """
   def to_period(date_time) do
     period_calendar =
-      [1,1,1,1,1,2,2,2,2,3,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9,9,10,10,10,10,11,11,11,11,12,12,12,12,12,12 ]
+      [
+        1,
+        1,
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        5,
+        5,
+        5,
+        5,
+        6,
+        6,
+        6,
+        6,
+        6,
+        7,
+        7,
+        7,
+        7,
+        8,
+        8,
+        8,
+        8,
+        9,
+        9,
+        9,
+        9,
+        9,
+        10,
+        10,
+        10,
+        10,
+        11,
+        11,
+        11,
+        11,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12
+      ]
 
     period_calendar
-    |> Enum.at(to_week(date_time) |> String.to_integer() )
+    |> Enum.at(to_week(date_time) |> String.to_integer())
     |> Integer.to_string()
     |> String.pad_leading(2, "0")
   end

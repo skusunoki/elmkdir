@@ -3,11 +3,11 @@ defmodule Elmkdir.CLI do
   Handle the command line interface for the `elmkdir` application.
   """
 
-@spec main([String.t()]) :: any()
-def main(argv) do
-  argv
-  |> Elmkdir.CLI.run()
-end
+  @spec main([String.t()]) :: any()
+  def main(argv) do
+    argv
+    |> Elmkdir.CLI.run()
+  end
 
   @spec run([String.t()]) :: any()
   def run(argv) do
@@ -31,7 +31,6 @@ end
     )
     |> options_to_map()
     |> args_to_internal_representation()
-
   end
 
   def options_to_map({option, argv, error}) do
@@ -64,17 +63,18 @@ end
     System.halt(0)
   end
 
-  def process({%{:explorer => true, :code => true }, folder}) do
+  def process({%{:explorer => true, :code => true}, folder}) do
     now = Elmkdir.DateTime.now()
+
     Elmkdir.Directory.create_folder(now, folder)
     |> tap(&Elmkdir.Explorer.open_folder_in_explorer(&1))
     |> tap(&Elmkdir.Code.open_folder_by_vscode(&1))
     |> Elmkdir.LinkFile.create_link_file(now, folder)
   end
 
-
   def process({%{:explorer => true}, folder}) do
     now = Elmkdir.DateTime.now()
+
     Elmkdir.Directory.create_folder(now, folder)
     |> tap(&Elmkdir.Explorer.open_folder_in_explorer(&1))
     |> Elmkdir.LinkFile.create_link_file(now, folder)
@@ -82,6 +82,7 @@ end
 
   def process({%{:code => true}, folder}) do
     now = Elmkdir.DateTime.now()
+
     Elmkdir.Directory.create_folder(now, folder)
     |> tap(&Elmkdir.Code.open_folder_by_vscode(&1))
     |> Elmkdir.LinkFile.create_link_file(now, folder)
@@ -89,8 +90,8 @@ end
 
   def process({_, folder}) do
     now = Elmkdir.DateTime.now()
+
     Elmkdir.Directory.create_folder(now, folder)
     |> Elmkdir.LinkFile.create_link_file(now, folder)
   end
-
 end
