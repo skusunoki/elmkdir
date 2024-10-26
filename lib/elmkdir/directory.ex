@@ -2,16 +2,12 @@ defmodule Elmkdir.Directory do
   @moduledoc """
   Create a directory with the generated folder name.
   """
-  alias Elmkdir.DateTime
-
   @spec create_folder(DateTime.t(), String.t()) :: String.t()
   def create_folder(now, leaf_folder_base_name) do
-
     generate_folder_list(now, leaf_folder_base_name)
-    |> Hierarchy.recursive_function(fn x, acc -> Enum.join([acc, x], "/" ) end)
+    |> Hierarchy.recursive_function(fn x, acc -> Enum.join([acc, x], "/") end)
     |> tap(&ensure_folder_exists(&1))
     |> List.last()
-
   end
 
   @spec generate_folder_list(DateTime.t(), String.t()) :: [String.t()]
