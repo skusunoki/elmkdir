@@ -26,8 +26,8 @@ defmodule Elmkdir.CLI do
   def parse_args(argv) do
     argv
     |> OptionParser.parse(
-      switches: [help: :boolean, explorer: :boolean, code: :boolean, jdex: :string],
-      aliases: [h: :help, e: :explorer, c: :code]
+      switches: [help: :boolean, explorer: :boolean, code: :boolean, daily: :boolean, jdex: :string],
+      aliases: [h: :help, e: :explorer, c: :code, d: :daily, j: :jdex]
     )
     |> options_to_map()
     |> args_to_internal_representation()
@@ -39,6 +39,10 @@ defmodule Elmkdir.CLI do
 
   def args_to_internal_representation({%{:help => true}, _, _}) do
     :help
+  end
+
+  def args_to_internal_representation({%{:daily => true}, _, _}) do
+    :daily
   end
 
   def args_to_internal_representation({option, [folder], _}) do
@@ -59,9 +63,22 @@ defmodule Elmkdir.CLI do
       -e  --explorer    open the folder in the file explorer
       -c  --code        open the folder in the vSCode editor
       -j  --jdex        create a shortcut in the JDex inbox
+      -d  --daily       create a daily folder
     """)
 
     System.halt(0)
+  end
+
+  def process(:daily) do
+    now = Elmkdir.DateTime.now()
+    folder = "DAILY"
+    jdex_code = "60"
+
+    Elmkdir.Directory.create_folder(now, folder)
+    |> tap(&Elmkdir.File.create_daily_index(&1, now, folder))
+    |> tap(&Elmkdir.LinkFile.create_link_file(&1, now, folder))
+    |> then(&Elmkdir.Shortcut.create_shortcut(&1, now, folder, jdex_code, "index.md"))
+    |> tap(&Elmkdir.Code.open_folder_by_vscode(&1))
   end
 
   def process({%{:explorer => true, :code => true, :jdex => jdex_code}, folder}) do
