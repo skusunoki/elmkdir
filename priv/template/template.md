@@ -6,6 +6,8 @@ aliases: [{{to_year}}-{{to_month}}-{{to_day}}]
 ---
 # {{to_year}}-{{to_month}}-{{to_day}}
 
+## Project list
+
 ## Daily To-dos
 
 ## Real time log

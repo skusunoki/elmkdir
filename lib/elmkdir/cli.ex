@@ -26,7 +26,13 @@ defmodule Elmkdir.CLI do
   def parse_args(argv) do
     argv
     |> OptionParser.parse(
-      switches: [help: :boolean, explorer: :boolean, code: :boolean, daily: :boolean, jdex: :string],
+      switches: [
+        help: :boolean,
+        explorer: :boolean,
+        code: :boolean,
+        daily: :boolean,
+        jdex: :string
+      ],
       aliases: [h: :help, e: :explorer, c: :code, d: :daily, j: :jdex]
     )
     |> options_to_map()
@@ -77,8 +83,10 @@ defmodule Elmkdir.CLI do
     Elmkdir.Directory.create_folder(now, folder)
     |> tap(&Elmkdir.File.create_daily_index(&1, now, folder))
     |> tap(&Elmkdir.LinkFile.create_link_file(&1, now, folder))
-    |> then(&Elmkdir.Shortcut.create_shortcut(&1, now, folder, jdex_code, "index.md"))
+    |> then(&Elmkdir.Hardlink.create_hardlink(&1, now, folder, jdex_code, "index.md"))
     |> tap(&Elmkdir.Code.open_folder_by_vscode(&1))
+
+
   end
 
   def process({%{:explorer => true, :code => true, :jdex => jdex_code}, folder}) do
@@ -89,6 +97,7 @@ defmodule Elmkdir.CLI do
     |> tap(&Elmkdir.Code.open_folder_by_vscode(&1))
     |> tap(&Elmkdir.LinkFile.create_link_file(&1, now, folder))
     |> tap(&Elmkdir.Shortcut.create_shortcut(&1, now, folder, jdex_code))
+
   end
 
   def process({%{:explorer => true, :jdex => jdex_code}, folder}) do
@@ -98,6 +107,8 @@ defmodule Elmkdir.CLI do
     |> tap(&Elmkdir.Explorer.open_folder_in_explorer(&1))
     |> tap(&Elmkdir.LinkFile.create_link_file(&1, now, folder))
     |> tap(&Elmkdir.Shortcut.create_shortcut(&1, now, folder, jdex_code))
+
+
   end
 
   def process({%{:code => true, :jdex => jdex_code}, folder}) do
@@ -107,6 +118,8 @@ defmodule Elmkdir.CLI do
     |> tap(&Elmkdir.Code.open_folder_by_vscode(&1))
     |> tap(&Elmkdir.LinkFile.create_link_file(&1, now, folder))
     |> tap(&Elmkdir.Shortcut.create_shortcut(&1, now, folder, jdex_code))
+
+
   end
 
   def process({%{:jdex => jdex_code}, folder}) do
@@ -116,6 +129,8 @@ defmodule Elmkdir.CLI do
     |> tap(&Elmkdir.LinkFile.create_link_file(&1, now, folder))
     |> then(&Elmkdir.Shortcut.create_shortcut(&1, now, folder, jdex_code))
     |> tap(&Elmkdir.Explorer.open_folder_in_explorer(&1))
+
+
   end
 
   def process({%{:explorer => true, :code => true}, folder}) do
@@ -133,5 +148,4 @@ defmodule Elmkdir.CLI do
   def process({%{}, folder}) do
     process({%{:jdex => "00"}, folder})
   end
-
 end
