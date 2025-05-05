@@ -1,6 +1,6 @@
 defmodule Elmkdir.File do
   @template_content File.read!("priv/template/template.md")
-  def create_daily_index(full_path, now, _folder) do
+  def create_daily_index(full_path, now, folder) do
     new_file =
       full_path <> "/index.md"
 
@@ -13,6 +13,9 @@ defmodule Elmkdir.File do
       |> String.replace("{{to_hour}}", Elmkdir.DateTime.to_hour(now))
       |> String.replace("{{to_minute}}", Elmkdir.DateTime.to_minute(now))
       |> String.replace("{{to_second}}", Elmkdir.DateTime.to_second(now))
+      |> String.replace("{{to_folder}}", full_path)
+      |> String.replace("{{to_folder_short}}", folder)
+
 
     File.write!(new_file, content)
   end

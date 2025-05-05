@@ -27,8 +27,11 @@ defmodule Elmkdir.Hardlink do
       "" ->
         hardlink_filename(full_path, now, nil, code)
 
-      folder ->
+      "DAILY" ->
         "#{Elmkdir.DateTime.to_year(now)}-#{Elmkdir.DateTime.to_month(now)}-#{Elmkdir.DateTime.to_day(now)}_#{folder}.md"
+
+      folder ->
+        "#{Elmkdir.DateTime.to_yyyymmddhhMMss(now)}_#{folder}.md"
     end
   end
 

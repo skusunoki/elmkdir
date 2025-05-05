@@ -83,43 +83,64 @@ defmodule Elmkdir.CLI do
     Elmkdir.Directory.create_folder(now, folder)
     |> tap(&Elmkdir.File.create_daily_index(&1, now, folder))
     |> tap(&Elmkdir.LinkFile.create_link_file(&1, now, folder))
+    |> tap(&Elmkdir.Shortcut.create_shortcut(&1, now, folder, jdex_code))
     |> then(&Elmkdir.Hardlink.create_hardlink(&1, now, folder, jdex_code, "index.md"))
     |> tap(&Elmkdir.Code.open_folder_by_vscode(&1))
-
-
   end
 
   def process({%{:explorer => true, :code => true, :jdex => jdex_code}, folder}) do
     now = Elmkdir.DateTime.now()
 
     Elmkdir.Directory.create_folder(now, folder)
-    |> tap(&Elmkdir.Explorer.open_folder_in_explorer(&1))
-    |> tap(&Elmkdir.Code.open_folder_by_vscode(&1))
     |> tap(&Elmkdir.LinkFile.create_link_file(&1, now, folder))
     |> tap(&Elmkdir.Shortcut.create_shortcut(&1, now, folder, jdex_code))
-
+    |> tap(
+      &Elmkdir.Hardlink.create_hardlink(
+        &1,
+        now,
+        folder,
+        jdex_code,
+        Elmkdir.LinkFile.hardlink_filename(now, folder)
+      )
+    )
+    |> tap(&Elmkdir.Code.open_folder_by_vscode(&1))
+    |> tap(&Elmkdir.Explorer.open_folder_in_explorer(&1))
   end
 
   def process({%{:explorer => true, :jdex => jdex_code}, folder}) do
     now = Elmkdir.DateTime.now()
 
     Elmkdir.Directory.create_folder(now, folder)
-    |> tap(&Elmkdir.Explorer.open_folder_in_explorer(&1))
     |> tap(&Elmkdir.LinkFile.create_link_file(&1, now, folder))
     |> tap(&Elmkdir.Shortcut.create_shortcut(&1, now, folder, jdex_code))
-
-
+    |> tap(
+      &Elmkdir.Hardlink.create_hardlink(
+        &1,
+        now,
+        folder,
+        jdex_code,
+        Elmkdir.LinkFile.hardlink_filename(now, folder)
+      )
+    )
+    |> tap(&Elmkdir.Explorer.open_folder_in_explorer(&1))
   end
 
   def process({%{:code => true, :jdex => jdex_code}, folder}) do
     now = Elmkdir.DateTime.now()
 
     Elmkdir.Directory.create_folder(now, folder)
-    |> tap(&Elmkdir.Code.open_folder_by_vscode(&1))
     |> tap(&Elmkdir.LinkFile.create_link_file(&1, now, folder))
     |> tap(&Elmkdir.Shortcut.create_shortcut(&1, now, folder, jdex_code))
-
-
+    |> tap(
+      &Elmkdir.Hardlink.create_hardlink(
+        &1,
+        now,
+        folder,
+        jdex_code,
+        Elmkdir.LinkFile.hardlink_filename(now, folder)
+      )
+    )
+    |> tap(&Elmkdir.Code.open_folder_by_vscode(&1))
   end
 
   def process({%{:jdex => jdex_code}, folder}) do
@@ -127,10 +148,16 @@ defmodule Elmkdir.CLI do
 
     Elmkdir.Directory.create_folder(now, folder)
     |> tap(&Elmkdir.LinkFile.create_link_file(&1, now, folder))
-    |> then(&Elmkdir.Shortcut.create_shortcut(&1, now, folder, jdex_code))
-    |> tap(&Elmkdir.Explorer.open_folder_in_explorer(&1))
-
-
+    |> tap(&Elmkdir.Shortcut.create_shortcut(&1, now, folder, jdex_code))
+    |> tap(
+      &Elmkdir.Hardlink.create_hardlink(
+        &1,
+        now,
+        folder,
+        jdex_code,
+        Elmkdir.LinkFile.hardlink_filename(now, folder)
+      )
+    )
   end
 
   def process({%{:explorer => true, :code => true}, folder}) do

@@ -7,6 +7,10 @@ defmodule Elmkdir.Config do
     Application.fetch_env!(:elmkdir, :folder_link_file_dir)
   end
 
+  def folder_jdex_inbox_dir(".") do
+    "."
+  end
+
   def folder_jdex_inbox_dir(code) do
     with folder when not is_nil(folder) <-
            Path.wildcard(
@@ -15,24 +19,26 @@ defmodule Elmkdir.Config do
            |> Enum.at(0) do
       folder
     else
-      nil -> case code do
-        "00" ->
-          Application.fetch_env!(:elmkdir, :folder_jdex_inbox_dir_01)
+      nil ->
+        case code do
+          "00" ->
+            Application.fetch_env!(:elmkdir, :folder_jdex_inbox_dir_01)
 
-        "01" ->
-          Application.fetch_env!(:elmkdir, :folder_jdex_inbox_dir_01)
+          "01" ->
+            Application.fetch_env!(:elmkdir, :folder_jdex_inbox_dir_01)
 
-        "10" ->
-          Application.fetch_env!(:elmkdir, :folder_jdex_inbox_dir_10)
+          "10" ->
+            Application.fetch_env!(:elmkdir, :folder_jdex_inbox_dir_10)
 
-        "50" ->
-          Application.fetch_env!(:elmkdir, :folder_jdex_inbox_dir_50)
+          "50" ->
+            Application.fetch_env!(:elmkdir, :folder_jdex_inbox_dir_50)
 
-        "60" ->
-          Application.fetch_env!(:elmkdir, :folder_jdex_inbox_dir_60)
-        _ ->
-          code
-      end
+          "60" ->
+            Application.fetch_env!(:elmkdir, :folder_jdex_inbox_dir_60)
+
+          _ ->
+            code
+        end
     end
   end
 end

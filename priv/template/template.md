@@ -14,4 +14,6 @@ aliases: [{{to_year}}-{{to_month}}-{{to_day}}]
 
 ### {{to_year}}-{{to_month}}-{{to_day}} {{to_hour}}:{{to_minute}}:{{to_second}} Creaed this daily note
 
+{{to_folder}}
+
 
