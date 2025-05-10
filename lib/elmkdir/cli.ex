@@ -31,9 +31,10 @@ defmodule Elmkdir.CLI do
         explorer: :boolean,
         code: :boolean,
         daily: :boolean,
-        jdex: :string
+        jdex: :string,
+        note: :boolean
       ],
-      aliases: [h: :help, e: :explorer, c: :code, d: :daily, j: :jdex]
+      aliases: [h: :help, e: :explorer, c: :code, d: :daily, j: :jdex, n: :note]
     )
     |> options_to_map()
     |> args_to_internal_representation()
@@ -70,10 +71,19 @@ defmodule Elmkdir.CLI do
       -c  --code        open the folder in the vSCode editor
       -j  --jdex        create a shortcut in the JDex inbox
       -d  --daily       create a daily folder
+      -n  --note        create a note file
     """)
 
     System.halt(0)
   end
+
+  def process({%{:note => true}, folder}) do
+    now = Elmkdir.DateTime.now()
+    jdex_code = "70.11"
+    Elmkdir.Config.folder_jdex_inbox_dir(jdex_code)
+    |> Elmkdir.Note.create_note(now, folder)
+  end
+
 
   def process(:daily) do
     now = Elmkdir.DateTime.now()
@@ -84,7 +94,8 @@ defmodule Elmkdir.CLI do
     |> tap(&Elmkdir.File.create_daily_index(&1, now, folder))
     |> tap(&Elmkdir.LinkFile.create_link_file(&1, now, folder))
     |> tap(&Elmkdir.Shortcut.create_shortcut(&1, now, folder, jdex_code))
-    |> then(&Elmkdir.Hardlink.create_hardlink(&1, now, folder, jdex_code, "index.md"))
+    |> tap(&Elmkdir.Hardlink.create_hardlink(&1, now, folder, jdex_code, "index.md"))
+    |> tap(&Elmkdir.Hardlink.create_hardlink(&1, now, folder, "70.11", "index.md"))
     |> tap(&Elmkdir.Code.open_folder_by_vscode(&1))
   end
 

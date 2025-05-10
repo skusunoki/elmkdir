@@ -15,6 +15,7 @@ defmodule Elmkdir.LinkFile do
       |> String.replace("{{to_minute}}", Elmkdir.DateTime.to_minute(now))
       |> String.replace("{{to_second}}", Elmkdir.DateTime.to_second(now))
       |> String.replace("{{to_folder}}", full_path)
+      |> String.replace("{{to_folder_short}}", folder)
 
     File.write!(new_file, content)
     create_hardlink(full_path, now, folder)
