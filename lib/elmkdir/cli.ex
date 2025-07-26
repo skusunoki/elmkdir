@@ -96,7 +96,6 @@ defmodule Elmkdir.CLI do
     |> tap(&Elmkdir.Shortcut.create_shortcut(&1, now, folder, jdex_code))
     |> tap(&Elmkdir.Hardlink.create_hardlink(&1, now, folder, jdex_code, "index.md"))
     |> tap(&Elmkdir.Hardlink.create_hardlink(&1, now, folder, "70.11", "index.md"))
-    |> tap(&Elmkdir.Code.open_folder_by_vscode(&1))
   end
 
   def process({%{:explorer => true, :code => true, :jdex => jdex_code}, folder}) do

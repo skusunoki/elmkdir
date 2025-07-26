@@ -1,4 +1,5 @@
 defmodule Elmkdir.Note do
+  @external_resource "priv/template/template_note.md"
   @template_content File.read!("priv/template/template_note.md")
   def create_note(full_path, now, note_name) do
     new_file =

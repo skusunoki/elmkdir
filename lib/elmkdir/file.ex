@@ -1,4 +1,5 @@
 defmodule Elmkdir.File do
+  @external_resource "priv/template/template.md"
   @template_content File.read!("priv/template/template.md")
   def create_daily_index(full_path, now, folder) do
     new_file =

@@ -1,4 +1,5 @@
 defmodule Elmkdir.LinkFile do
+  @external_resource "priv/template/template_linkfile.md"
   @template_content File.read!("priv/template/template_linkfile.md")
   def create_link_file(full_path, now, folder) do
     new_file =
