@@ -1,4 +1,4 @@
-defmodule Elmkdir.LinkFile do
+defmodule Elmkdir.Note.LinkFile do
   @external_resource "priv/template/template_linkfile.md"
   @template_content File.read!("priv/template/template_linkfile.md")
   def create_link_file(full_path, now, folder) do
@@ -23,21 +23,15 @@ defmodule Elmkdir.LinkFile do
   end
 
   def create_hardlink(full_path, now, folder) do
-    with new_file =
-           (Elmkdir.Config.folder_link_file_dir() <>
-              "/" <> Elmkdir.DateTime.to_yyyymmddhhMMss(now) <> ".md")
-           |> to_win(),
-         hardlink_file_name = (full_path <> "/" <> hardlink_filename(now, folder)) |> to_win(),
-         {_, 0} <- System.cmd("cmd.exe", ["/c", "mklink", "/H", hardlink_file_name, new_file]) do
-      full_path
-    else
+    new_file = Elmkdir.Config.folder_link_file_dir() <> "/" <> Elmkdir.DateTime.to_yyyymmddhhMMss(now) <> ".md"
+    hardlink_file_path = full_path <> "/" <> hardlink_filename(now, folder)
+    
+    case Elmkdir.System.create_hardlink(new_file, hardlink_file_path) do
+      {_, 0} -> full_path
       _ -> raise "Failed to create a hardlink"
     end
   end
 
-  def to_win(path) do
-    path |> String.replace("/", "\\")
-  end
 
   def hardlink_filename(now, folder) do
     Elmkdir.DateTime.to_yyyymmddhhMMss(now) <> "_" <> folder <> ".md"

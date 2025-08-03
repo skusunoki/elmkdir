@@ -1,9 +1,9 @@
-defmodule Elmkdir.File do
-  @external_resource "priv/template/template.md"
-  @template_content File.read!("priv/template/template.md")
-  def create_daily_index(full_path, now, folder) do
+defmodule Elmkdir.Note.Note do
+  @external_resource "priv/template/template_note.md"
+  @template_content File.read!("priv/template/template_note.md")
+  def create_note(full_path, now, note_name) do
     new_file =
-      full_path <> "/index.md"
+      full_path <> "/" <> Elmkdir.DateTime.to_yyyymmddhhMMss(now) <> "_" <> note_name <> ".md"
 
     content =
       @template_content
@@ -15,7 +15,7 @@ defmodule Elmkdir.File do
       |> String.replace("{{to_minute}}", Elmkdir.DateTime.to_minute(now))
       |> String.replace("{{to_second}}", Elmkdir.DateTime.to_second(now))
       |> String.replace("{{to_folder}}", full_path)
-      |> String.replace("{{to_folder_short}}", folder)
+      |> String.replace("{{note_name}}", note_name)
 
 
     File.write!(new_file, content)
